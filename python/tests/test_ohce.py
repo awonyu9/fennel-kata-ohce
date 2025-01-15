@@ -1,6 +1,7 @@
 import pytest
 from ohce.greeter import Clock, Greeter
 import unittest
+from ohce.ui import Interactor, UI
 
 class Test_clock(Clock):
     __test__ = False
@@ -9,6 +10,17 @@ class Test_clock(Clock):
 
     def current_hour(self):
         return self.hour
+    
+class Test_interactor(Interactor):
+    __test__ = False
+    def __init__(self, message):
+        self.message = message
+
+    def read_input(self):
+        return self.message
+    
+    def print_message(self, input):
+        return input
 
 @pytest.fixture
 def greeter():
@@ -48,4 +60,12 @@ def test_ohce_main_loop():
     - oto
     - That was a palindrome!
     """
-    pytest.fail("TODO")
+    inputs = ["hello", "oto", "quit"]
+    expected_messages = ["olleh", "oto\nThat was a palindrome!", None]
+    for input in inputs:
+        test_interactor = Test_interactor(input)
+        ui = UI(test_interactor)
+        output = ui.work_input(input)
+        assert output == expected_messages[inputs.index(input)]
+
+    # pytest.fail("TODO")
