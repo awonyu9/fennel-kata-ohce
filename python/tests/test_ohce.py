@@ -3,6 +3,7 @@ from ohce.greeter import Clock, Greeter
 import unittest
 
 class Test_clock(Clock):
+    __test__ = False
     def __init__(self, hour):
         self.hour = hour
 
@@ -29,7 +30,10 @@ def test_greeting_never_returns_none():
     Check that for each hour from 0 to 23, the greet()
     method never return None
     """
-    pytest.fail("TODO")
+    for hour in range(24):
+        test_clock = Test_clock(hour)
+        greeter = Greeter(test_clock)
+        assert greeter.greet() is not None
 
 
 def test_ohce_main_loop():
