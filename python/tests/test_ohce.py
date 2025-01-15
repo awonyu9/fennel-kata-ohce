@@ -3,7 +3,7 @@ from ohce.greeter import Clock, Greeter
 import unittest
 from ohce.ui import Interactor, UI
 
-class Test_clock(Clock):
+class Stub_clock(Clock):
     __test__ = False
     def __init__(self, hour):
         self.hour = hour
@@ -11,7 +11,7 @@ class Test_clock(Clock):
     def current_hour(self):
         return self.hour
     
-class Test_interactor(Interactor):
+class Fake_interactor(Interactor):
     __test__ = False
     def __init__(self, message):
         self.message = message
@@ -24,7 +24,7 @@ class Test_interactor(Interactor):
 
 @pytest.fixture
 def greeter():
-    test_clock = Test_clock(0)
+    test_clock = Stub_clock(0)
     greeter = Greeter(test_clock)
 
     yield greeter
@@ -43,7 +43,7 @@ def test_greeting_never_returns_none():
     method never return None
     """
     for hour in range(24):
-        test_clock = Test_clock(hour)
+        test_clock = Stub_clock(hour)
         greeter = Greeter(test_clock)
         assert greeter.greet() is not None
 
@@ -63,7 +63,7 @@ def test_ohce_main_loop():
     inputs = ["hello", "oto", "quit"]
     expected_messages = ["olleh", "oto\nThat was a palindrome!", None]
     for input in inputs:
-        test_interactor = Test_interactor(input)
+        test_interactor = Fake_interactor(input)
         ui = UI(test_interactor)
         output = ui.work_input(input)
         assert output == expected_messages[inputs.index(input)]
