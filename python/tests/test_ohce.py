@@ -3,12 +3,15 @@ from ohce.greeter import Clock, Greeter
 import unittest
 
 class Test_clock(Clock):
+    def __init__(self, hour):
+        self.hour = hour
+
     def current_hour(self):
-        return 0
+        return self.hour
 
 @pytest.fixture
 def greeter():
-    test_clock = Test_clock()
+    test_clock = Test_clock(0)
     greeter = Greeter(test_clock)
 
     yield greeter
@@ -19,7 +22,6 @@ def test_nightly_greeting(greeter):
     (when current hour is 0)
     """
     assert greeter.greet() == "Good night"
-    # pytest.fail("TODO")
 
 
 def test_greeting_never_returns_none():
