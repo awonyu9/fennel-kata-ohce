@@ -1,15 +1,20 @@
 from datetime import datetime
+from abc import abstractmethod
 
+class Clock:
+    @abstractmethod
+    def current_hour():
+        pass
 
-class SystemClock:
+class SystemClock(Clock):
     def current_hour(self):
         now = datetime.now()
         return now.hour
-
+    
 
 class Greeter:
-    def __init__(self):
-        self.clock = SystemClock()
+    def __init__(self, clock):
+        self.clock = clock
 
     def greet(self):
         current_hour = self.clock.current_hour()
